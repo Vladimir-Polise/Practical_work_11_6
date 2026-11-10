@@ -1,0 +1,74 @@
+# ============================================================================
+#  Makefile для 9_5_Practical_work_Game
+#  Сборка: MSYS2 MINGW64 + GCC
+#  Тесты: Unity (В этой работе не используем, но пути и сборку оставляем)
+#
+#  Использование (из MSYS2 MINGW64 в корне проекта):
+#    make          — собрать приложение
+#    make test     — собрать и запустить тесты Unity
+#    make run      — собрать и запустить приложение
+#    make clean    — удалить bin/ и obj/
+#    make ci       — чистая сборка + тесты
+# ============================================================================
+
+CC      = gcc
+RM      = rm -f
+MKDIR   = mkdir -p
+
+# --- Пути проекта ---
+SRC_DIR     = src
+INC_DIR     = include
+TEST_DIR    = tests
+UNITY_DIR   = tests/unity
+BIN_DIR     = bin/Debug
+
+# --- Флаги компиляции ---
+CFLAGS  = -Wall -Wextra -g \
+          -I$(INC_DIR) \
+          -I$(TEST_DIR) \
+          -I$(UNITY_DIR)
+
+# --- Исходники ---
+APP_SRC     = $(SRC_DIR)/main.c      $(SRC_DIR)/task_1.c
+TEST_SRC    = $(TEST_DIR)/test_main.c $(SRC_DIR)/task_1.c $(UNITY_DIR)/unity.c
+
+# --- Целевые бинарники ---
+APP_BIN     = $(BIN_DIR)/11_6_Practical_work.exe
+TEST_BIN    = $(BIN_DIR)/11_6_Practical_work.exe
+
+.PHONY: all app test run rebuild clean ci
+
+all: app
+
+# --- Приложение ---
+app: $(APP_BIN)
+
+$(APP_BIN): $(APP_SRC) $(INC_DIR)/task_1.h
+	@$(MKDIR) $(BIN_DIR)
+	$(CC) $(CFLAGS) $(APP_SRC) -o $@
+	@echo "==> Built: $@"
+
+# --- Тесты ---
+test: $(TEST_BIN)
+	@echo "==> Running tests..."
+	@./$(TEST_BIN)
+
+$(TEST_BIN): $(TEST_SRC) $(INC_DIR)/task_1.h $(UNITY_DIR)/unity.h
+	@$(MKDIR) $(BIN_DIR)
+	$(CC) $(CFLAGS) $(TEST_SRC) -o $@
+	@echo "==> Built: $@"
+
+# --- Запуск приложения ---
+run: app
+	@./$(APP_BIN)
+
+# --- Пересборка / очистка ---
+rebuild: clean all
+
+clean:
+	@$(RM) -r bin obj
+	@echo "==> Cleaned"
+
+# --- CI ---
+ci: clean test
+	@echo "==> CI: all tests passed"

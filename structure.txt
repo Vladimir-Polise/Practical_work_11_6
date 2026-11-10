@@ -1,0 +1,30 @@
+Структура папок тома Media
+Серийный номер тома: E6E1-CABE
+D:.
+|   11_6_Practical_work.cbp
+|   11_6_Practical_work.layout
+|   Makefile
+|   Makefle.txt
+|   readme.txt
+|   structure.txt
+|   
++---bin
+|   \---Debug
++---include
+|       task_1.h
+|       task_2.h
+|       
++---src
+|       main.c
+|       task_1.c
+|       task_2.c
+|       
+\---tests
+    |   test_main.c
+    |   test_main.c.save
+    |   
+    \---unity
+            unity.c
+            unity.h
+            unity_internals.h
+            
